@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uber — Ride with Uber</title>
+    <meta name="description" content="Book a ride instantly with Uber. Fast, reliable, and affordable rides at your fingertips.">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="uber-nav" id="uber-nav">
+        <div class="nav-left">
+            <svg class="uber-logo" viewBox="0 0 100 24" fill="currentColor" width="70">
+                <text x="0" y="20" font-family="Inter, sans-serif" font-weight="800" font-size="22">Uber</text>
+            </svg>
+        </div>
+        <div class="nav-right">
+            <button class="nav-btn" id="activity-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Activity</span>
+            </button>
+            <div class="user-avatar" id="user-avatar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="uber-main">
+        <!-- Map Section -->
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="map-overlay-gradient"></div>
+        </div>
+
+        <!-- Booking Panel -->
+        <div class="booking-panel" id="booking-panel">
+            <!-- Drag Handle -->
+            <div class="panel-handle" id="panel-handle">
+                <div class="handle-bar"></div>
+            </div>
+
+            <!-- Where to? Section -->
+            <div class="panel-content" id="panel-content">
+                <div class="search-section" id="search-section">
+                    <h1 class="greeting" id="greeting">Good evening</h1>
+                    <div class="search-card" id="search-card">
+                        <div class="search-input-group">
+                            <div class="location-dots">
+                                <div class="dot dot-green"></div>
+                                <div class="dot-line"></div>
+                                <div class="dot dot-red"></div>
+                            </div>
+                            <div class="inputs-wrapper">
+                                <div class="input-row">
+                                    <input type="text" id="pickup" placeholder="Pickup location" autocomplete="off">
+                                    <button class="gps-btn" onclick="useGPS()" title="Use current location" id="gps-btn">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                            <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
+                                            <circle cx="12" cy="12" r="8" stroke-dasharray="2 3"></circle>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="input-divider"></div>
+                                <div class="input-row">
+                                    <input type="text" id="destination" placeholder="Where to?" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="find-ride-btn" onclick="findRoute()" id="find-ride-btn">
+                            <span>Search</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Quick Suggestions -->
+                    <div class="quick-suggestions">
+                        <button class="suggestion-chip" id="suggestion-home" onclick="quickFill('Home')">
+                            <div class="chip-icon home-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </div>
+                            <span>Home</span>
+                        </button>
+                        <button class="suggestion-chip" id="suggestion-work" onclick="quickFill('Work')">
+                            <div class="chip-icon work-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                </svg>
+                            </div>
+                            <span>Work</span>
+                        </button>
+                        <button class="suggestion-chip" id="suggestion-airport" onclick="quickFill('Airport')">
+                            <div class="chip-icon airport-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 2L11 13"></path>
+                                    <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                                </svg>
+                            </div>
+                            <span>Airport</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ride Options (hidden initially) -->
+                <div class="ride-options" id="ride-options" style="display: none;">
+                    <div class="ride-header">
+                        <button class="back-btn" onclick="goBack()" id="back-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                        </button>
+                        <h2>Choose a ride</h2>
+                        <div class="route-summary" id="route-summary"></div>
+                    </div>
+                    <div class="rides-list" id="rides-list"></div>
+                    <div class="payment-method" id="payment-method">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                        <span>•••• 4242</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <button class="confirm-ride-btn" id="confirm-ride-btn" onclick="confirmSelectedRide()" disabled>
+                        Confirm Ride
+                    </button>
+                </div>
+
+                <!-- Booking Confirmed (hidden initially) -->
+                <div class="booking-confirmed" id="booking-confirmed" style="display: none;">
+                    <div class="driver-card" id="driver-card"></div>
+                    <div class="trip-progress" id="trip-progress"></div>
+                    <button class="cancel-btn" id="cancel-btn" onclick="cancelRide()">Cancel Ride</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner-ring"></div>
+            <p>Finding rides near you...</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

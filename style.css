@@ -1,0 +1,985 @@
+/* ============================================
+   UBER CLONE — Premium Design System
+   ============================================ */
+
+/* --- CSS Variables --- */
+:root {
+    --uber-black: #000000;
+    --uber-dark: #0a0a0a;
+    --uber-surface: #141414;
+    --uber-card: #1a1a1a;
+    --uber-card-hover: #222222;
+    --uber-border: #2a2a2a;
+    --uber-text: #ffffff;
+    --uber-text-secondary: #a0a0a0;
+    --uber-text-muted: #6b6b6b;
+    --uber-green: #00c853;
+    --uber-green-glow: rgba(0, 200, 83, 0.15);
+    --uber-blue: #276ef1;
+    --uber-red: #e74c3c;
+    --uber-red-dot: #ff4444;
+    --uber-accent: #f5f5f5;
+    --uber-input-bg: #242424;
+    --uber-radius: 12px;
+    --uber-radius-lg: 20px;
+    --uber-radius-xl: 28px;
+    --uber-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --uber-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
+    --uber-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --panel-height: 52vh;
+}
+
+/* --- Reset & Base --- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--uber-black);
+    color: var(--uber-text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* --- Top Navigation --- */
+.uber-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 70%, transparent 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.uber-logo {
+    color: white;
+    height: 24px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--uber-transition);
+    font-family: inherit;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--uber-transition);
+}
+
+.user-avatar:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* --- Main Layout --- */
+.uber-main {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* --- Map --- */
+.map-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+.map-overlay-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* --- Leaflet custom dark tiles overlay --- */
+.leaflet-tile-pane {
+    filter: brightness(0.7) contrast(1.1) saturate(0.8);
+}
+
+.leaflet-control-attribution {
+    background: rgba(0, 0, 0, 0.5) !important;
+    color: #666 !important;
+    font-size: 10px !important;
+}
+
+.leaflet-control-attribution a {
+    color: #888 !important;
+}
+
+.leaflet-control-zoom a {
+    background: var(--uber-surface) !important;
+    color: white !important;
+    border-color: var(--uber-border) !important;
+    width: 36px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    font-size: 16px !important;
+    transition: var(--uber-transition);
+}
+
+.leaflet-control-zoom a:hover {
+    background: var(--uber-card-hover) !important;
+}
+
+/* --- Booking Panel --- */
+.booking-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--uber-dark);
+    border-radius: var(--uber-radius-xl) var(--uber-radius-xl) 0 0;
+    box-shadow: var(--uber-shadow-lg);
+    max-height: 85vh;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.panel-handle {
+    display: flex;
+    justify-content: center;
+    padding: 12px 0 4px;
+    cursor: grab;
+}
+
+.handle-bar {
+    width: 36px;
+    height: 4px;
+    background: var(--uber-border);
+    border-radius: 4px;
+    transition: var(--uber-transition);
+}
+
+.panel-handle:hover .handle-bar {
+    background: var(--uber-text-muted);
+    width: 44px;
+}
+
+.panel-content {
+    padding: 8px 20px 28px;
+    overflow-y: auto;
+    max-height: calc(85vh - 30px);
+}
+
+/* --- Search Section --- */
+.greeting {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.search-card {
+    background: var(--uber-surface);
+    border-radius: var(--uber-radius-lg);
+    padding: 16px;
+    border: 1px solid var(--uber-border);
+    transition: var(--uber-transition);
+}
+
+.search-card:focus-within {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.search-input-group {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.location-dots {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+    gap: 0;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.dot-green {
+    background: var(--uber-green);
+    box-shadow: 0 0 8px var(--uber-green-glow);
+    animation: pulse-green 2s infinite;
+}
+
+.dot-red {
+    background: var(--uber-red-dot);
+    box-shadow: 0 0 8px rgba(255, 68, 68, 0.2);
+}
+
+.dot-line {
+    width: 2px;
+    height: 28px;
+    background: repeating-linear-gradient(
+        to bottom,
+        var(--uber-text-muted) 0px,
+        var(--uber-text-muted) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+    margin: 4px 0;
+}
+
+@keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 4px var(--uber-green-glow); }
+    50% { box-shadow: 0 0 12px rgba(0, 200, 83, 0.35); }
+}
+
+.inputs-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-row input {
+    flex: 1;
+    background: var(--uber-input-bg);
+    border: 1px solid transparent;
+    border-radius: var(--uber-radius);
+    padding: 13px 16px;
+    color: var(--uber-text);
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 500;
+    outline: none;
+    transition: var(--uber-transition);
+}
+
+.input-row input::placeholder {
+    color: var(--uber-text-muted);
+    font-weight: 400;
+}
+
+.input-row input:focus {
+    border-color: rgba(255, 255, 255, 0.12);
+    background: #2a2a2a;
+}
+
+.input-divider {
+    height: 1px;
+    background: var(--uber-border);
+    margin: 4px 0;
+    opacity: 0.5;
+}
+
+.gps-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(0, 200, 83, 0.1);
+    border: 1px solid rgba(0, 200, 83, 0.2);
+    color: var(--uber-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--uber-transition);
+    flex-shrink: 0;
+}
+
+.gps-btn:hover {
+    background: rgba(0, 200, 83, 0.2);
+    transform: scale(1.05);
+}
+
+.gps-btn:active {
+    transform: scale(0.95);
+}
+
+.gps-btn.active {
+    background: var(--uber-green);
+    color: black;
+    animation: gps-pulse 1.5s ease-in-out;
+}
+
+@keyframes gps-pulse {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.find-ride-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--uber-text);
+    color: var(--uber-black);
+    border: none;
+    border-radius: var(--uber-radius);
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--uber-transition);
+    letter-spacing: 0.2px;
+}
+
+.find-ride-btn:hover {
+    background: #e0e0e0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+.find-ride-btn:active {
+    transform: translateY(0);
+}
+
+/* --- Quick Suggestions --- */
+.quick-suggestions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.quick-suggestions::-webkit-scrollbar {
+    display: none;
+}
+
+.suggestion-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--uber-surface);
+    border: 1px solid var(--uber-border);
+    border-radius: 14px;
+    padding: 12px 18px;
+    color: var(--uber-text);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--uber-transition);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.suggestion-chip:hover {
+    background: var(--uber-card-hover);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.chip-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.home-icon {
+    background: rgba(0, 200, 83, 0.12);
+    color: var(--uber-green);
+}
+
+.work-icon {
+    background: rgba(39, 110, 241, 0.12);
+    color: var(--uber-blue);
+}
+
+.airport-icon {
+    background: rgba(231, 76, 60, 0.12);
+    color: var(--uber-red);
+}
+
+/* --- Ride Options --- */
+.ride-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.ride-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.back-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--uber-surface);
+    border: 1px solid var(--uber-border);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--uber-transition);
+    margin-bottom: 4px;
+}
+
+.back-btn:hover {
+    background: var(--uber-card-hover);
+}
+
+.route-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--uber-text-secondary);
+}
+
+.route-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--uber-surface);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+/* --- Rides List --- */
+.rides-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 16px;
+    max-height: 280px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--uber-border) transparent;
+}
+
+.ride-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: var(--uber-radius);
+    cursor: pointer;
+    transition: var(--uber-transition);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.ride-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.02) 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.ride-card:hover {
+    background: var(--uber-surface);
+}
+
+.ride-card:hover::before {
+    opacity: 1;
+}
+
+.ride-card.selected {
+    background: var(--uber-surface);
+    border-color: var(--uber-text);
+}
+
+.ride-card.selected::after {
+    content: '✓';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--uber-text);
+    color: var(--uber-black);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.ride-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ride-details {
+    flex: 1;
+}
+
+.ride-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.ride-eta {
+    font-size: 13px;
+    color: var(--uber-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ride-eta .eta-badge {
+    color: var(--uber-green);
+    font-weight: 500;
+}
+
+.ride-desc {
+    font-size: 12px;
+    color: var(--uber-text-muted);
+    margin-top: 2px;
+}
+
+.ride-fare {
+    font-size: 16px;
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.ride-fare-original {
+    font-size: 12px;
+    color: var(--uber-text-muted);
+    text-decoration: line-through;
+    margin-top: 2px;
+    text-align: right;
+}
+
+/* --- Payment Method --- */
+.payment-method {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--uber-surface);
+    border: 1px solid var(--uber-border);
+    border-radius: var(--uber-radius);
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    transition: var(--uber-transition);
+    color: var(--uber-text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.payment-method span {
+    flex: 1;
+}
+
+.payment-method:hover {
+    background: var(--uber-card-hover);
+}
+
+/* --- Confirm Button --- */
+.confirm-ride-btn {
+    width: 100%;
+    background: var(--uber-text);
+    color: var(--uber-black);
+    border: none;
+    border-radius: var(--uber-radius);
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--uber-transition);
+    letter-spacing: 0.2px;
+}
+
+.confirm-ride-btn:hover:not(:disabled) {
+    background: #e0e0e0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
+}
+
+.confirm-ride-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.confirm-ride-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* --- Booking Confirmed --- */
+.driver-card {
+    background: var(--uber-surface);
+    border: 1px solid var(--uber-border);
+    border-radius: var(--uber-radius-lg);
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.driver-info-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.driver-photo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #333, #555);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.driver-meta {
+    flex: 1;
+}
+
+.driver-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.driver-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--uber-text-secondary);
+}
+
+.driver-rating .star {
+    color: #ffc107;
+}
+
+.driver-car {
+    text-align: right;
+}
+
+.car-model {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.car-plate {
+    font-size: 18px;
+    font-weight: 800;
+    background: var(--uber-input-bg);
+    border-radius: 8px;
+    padding: 4px 12px;
+    display: inline-block;
+    letter-spacing: 1px;
+}
+
+.trip-divider {
+    height: 1px;
+    background: var(--uber-border);
+    margin-bottom: 16px;
+}
+
+.trip-detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.trip-detail-row .label {
+    color: var(--uber-text-muted);
+}
+
+.trip-detail-row .value {
+    font-weight: 600;
+}
+
+.trip-progress {
+    background: var(--uber-surface);
+    border: 1px solid var(--uber-border);
+    border-radius: var(--uber-radius-lg);
+    padding: 20px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.progress-status {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.progress-status .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--uber-green);
+    animation: status-blink 1s infinite;
+}
+
+@keyframes status-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 4px;
+    background: var(--uber-border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--uber-green), #00e676);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.progress-eta {
+    font-size: 13px;
+    color: var(--uber-text-muted);
+}
+
+/* --- Cancel Button --- */
+.cancel-btn {
+    width: 100%;
+    background: transparent;
+    color: var(--uber-red);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    border-radius: var(--uber-radius);
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--uber-transition);
+}
+
+.cancel-btn:hover {
+    background: rgba(231, 76, 60, 0.08);
+    border-color: rgba(231, 76, 60, 0.5);
+}
+
+/* --- Loading Overlay --- */
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner {
+    text-align: center;
+}
+
+.spinner-ring {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--uber-border);
+    border-top-color: var(--uber-text);
+    border-radius: 50%;
+    margin: 0 auto 18px;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-spinner p {
+    font-size: 15px;
+    color: var(--uber-text-secondary);
+    font-weight: 500;
+}
+
+/* --- Slide-in Animations --- */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.ride-card {
+    animation: slideUp 0.35s ease forwards;
+    opacity: 0;
+}
+
+.ride-card:nth-child(1) { animation-delay: 0.05s; }
+.ride-card:nth-child(2) { animation-delay: 0.1s; }
+.ride-card:nth-child(3) { animation-delay: 0.15s; }
+.ride-card:nth-child(4) { animation-delay: 0.2s; }
+.ride-card:nth-child(5) { animation-delay: 0.25s; }
+
+/* --- Responsive --- */
+@media (min-width: 768px) {
+    .booking-panel {
+        width: 420px;
+        left: 20px;
+        right: auto;
+        bottom: 20px;
+        border-radius: var(--uber-radius-xl);
+        max-height: calc(100vh - 40px);
+    }
+
+    .panel-handle {
+        display: none;
+    }
+
+    .greeting {
+        font-size: 28px;
+    }
+
+    .map-overlay-gradient {
+        display: none;
+    }
+}
+
+@media (min-width: 1024px) {
+    .booking-panel {
+        width: 440px;
+        left: 32px;
+        bottom: 32px;
+    }
+}
+
+/* --- Scrollbar Styling --- */
+.panel-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+    background: var(--uber-border);
+    border-radius: 4px;
+}
+
+.rides-list::-webkit-scrollbar {
+    width: 3px;
+}
+
+.rides-list::-webkit-scrollbar-thumb {
+    background: var(--uber-border);
+    border-radius: 3px;
+}
