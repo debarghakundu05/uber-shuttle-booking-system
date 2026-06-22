@@ -6,7 +6,7 @@ A responsive ride-booking UI inspired by Uber Shuttle. Built for IEM 1st year pr
 **[https://uber-shuttle-booking-system.vercel.app](https://uber-shuttle-booking-system.vercel.app)**
 
 ##  Screenshot
-![App Screenshot]()
+![App Screenshot](https://github.com/debarghakundu05/uber-shuttle-booking-system/blob/main/Screenshot%20(63).png)
 
 ##  Features
 - **Interactive Map**: Real-time Kolkata map using Leaflet/Map API
